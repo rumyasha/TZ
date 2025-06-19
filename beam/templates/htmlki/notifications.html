@@ -1,0 +1,35 @@
+<div>
+  <h2>CRUD Operations</h2>
+  <button onclick="createPost()">Create Post</button>
+  <button onclick="listPosts()">List Posts</button>
+</div>
+
+<div>
+  <h2>WebSocket Test</h2>
+  <input id="wsMessage" placeholder="Message">
+  <button onclick="sendWsMessage()">Send</button>
+  <div id="wsOutput"></div>
+</div>
+
+<script>
+  // CRUD операции через Fetch API
+  async function createPost() {
+    const response = await fetch('/api/posts/', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({title: 'New', content: 'Post'})
+    });
+    console.log(await response.json());
+  }
+
+  // WebSocket
+  const ws = new WebSocket('ws://' + window.location.host + '/ws/notifications/');
+  ws.onmessage = (e) => {
+    document.getElementById('wsOutput').innerHTML += `<p>${e.data}</p>`;
+  };
+
+  function sendWsMessage() {
+    const message = document.getElementById('wsMessage').value;
+    ws.send(JSON.stringify({message}));
+  }
+</script>

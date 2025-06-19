@@ -1,0 +1,38 @@
+<div class="mb-4">
+    <button onclick="testCrud()" class="btn btn-sm btn-warning">
+        Тест CRUD API
+    </button>
+    <div id="crud-result" class="mt-2"></div>
+</div>
+
+<script>
+async function testCrud() {
+    const result = document.getElementById('crud-result');
+    result.innerHTML = '<div class="spinner-border spinner-border-sm"></div>';
+    
+    try {
+        // 1. Создаем пост
+        const createRes = await fetch('/api/posts/', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({title: 'Test', content: 'From frontend'})
+        });
+        
+        // 2. Получаем список
+        const listRes = await fetch('/api/posts/');
+        const posts = await listRes.json();
+        
+        result.innerHTML = `
+            <div class="alert alert-success p-2">
+                Работает! Постов: ${posts.length}
+            </div>
+        `;
+    } catch (e) {
+        result.innerHTML = `
+            <div class="alert alert-danger p-2">
+                Ошибка: ${e.message}
+            </div>
+        `;
+    }
+}
+</script>

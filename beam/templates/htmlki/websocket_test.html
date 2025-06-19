@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const socket = new WebSocket(`ws://${window.location.host}/ws/notifications/`);
+
+            socket.onmessage = function(e) {
+                const data = JSON.parse(e.data);
+                const div = document.createElement('div');
+                div.innerHTML = `<p><strong>${new Date().toLocaleTimeString()}:</strong> ${data.message}</p>`;
+                document.getElementById('notifications').prepend(div);
+            };
+
+            socket.onclose = function(e) {
+                console.error('Socket closed:', e);
+            };
+        });
+    </script>
+</head>
+<body>
+    <h1>WebSocket Notifications</h1>
+    <div id="notifications"></div>
+</body>
+</html>

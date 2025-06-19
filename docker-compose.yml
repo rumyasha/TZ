@@ -1,0 +1,19 @@
+services:
+  web:
+    build: .
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             gunicorn --worker-class gthread --threads 4 -b :8000 core.wsgi:application"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - db
+
+  websocket:
+    build: .
+    command: python manage.py runworker --threads 4
+    depends_on:
+      - redis
+      - db

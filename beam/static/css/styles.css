@@ -1,0 +1,47 @@
+/* Основные стили */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    flex: 1;
+}
+
+/* Стили для постов */
+.post-content {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+/* Стили для комментариев */
+.comments .card {
+    border: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.comments .card-body {
+    padding: 1.5rem;
+}
+
+/* Форма комментариев */
+#id_text {
+    width: 100%;
+    min-height: 100px;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .post-content {
+        font-size: 1rem;
+    }
+
+    .comments .card-body {
+        padding: 1rem;
+    }
+}

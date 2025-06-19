@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<article class="mb-5">
+    <!-- ... существующий контент поста ... -->
+</article>
+
+<section class="comments mb-5" id="comments-section">
+    <h3>Комментарии (<span id="comments-count">{{ comments.count }}</span>)</h3>
+
+    {% if user.is_authenticated %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Добавить комментарий</h5>
+            <form id="comment-form">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <textarea class="form-control" id="comment-text" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Отправить</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    <div id="comments-list">
+        {% include 'partials/comments_list.html' %}
+    </div>
+</section>
+
+{% block scripts %}
+<script>
+document.getElementById('comment-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = {
+        text: document.getElementById('comment-text').value,
+        post: {{ post.id }}
+    };
+
+    try {
+        const response = await fetch('/api/comments/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+                {% if user.is_authenticated %}
+                'Authorization': 'Bearer YOUR_ACCESS_TOKEN'  // Замените на реальный токен
+                {% endif %}
+            },
+            body: JSON.stringify(formData)
+        });
+
+        if (response.ok) {
+            document.getElementById('comment-text').value = '';
+            loadComments();
+        }
+    } catch (error) {
+        console.error('Ошибка:', error);
+    }
+});
+
+async function loadComments() {
+    const response = await fetch(`/api/posts/{{ post.id }}/comments/`);
+    const data = await response.json();
+
+    document.getElementById('comments-list').innerHTML = data.html;
+    document.getElementById('comments-count').textContent = data.count;
+}
+
+// Опционально: автообновление комментариев каждые 30 сек
+setInterval(loadComments, 30000);
+</script>
+{% endblock %}
+{% endblock %}
