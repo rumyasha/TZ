@@ -1,5 +1,5 @@
 README для Django-проекта "MyBlog"
-1. Админка: /admin (логин: admin, пароль: admin123)
+1. Админка: /admin (логин: admin, пароль: admin)
 2. API Docs: /api/schema/swagger-ui/
 3. WebSocket тест: /notifications/
 📌 О проекте
