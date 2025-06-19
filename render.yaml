@@ -9,3 +9,5 @@ services:
         value: postgresql://user:pass@host:5432/db
       - key: SECRET_KEY
         generateValue: true
+        buildCommand: "poetry install --no-dev"
+        startCommand: "poetry run gunicorn core.wsgi:application --bind 0.0.0.0:$PORT"
